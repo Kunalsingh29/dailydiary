@@ -180,6 +180,54 @@ Key LLD decisions here (we'll justify each when we build):
 
 ---
 
+## LLD-5 · Config = environment, not code (12-factor)
+
+**Context:** The app will need a Django `SECRET_KEY`, DB credentials in prod, and later an `ANTHROPIC_API_KEY`. Where do these live?
+
+**Options considered:**
+1. Hard-code in `settings.py`.
+2. One `settings.py` per env (`settings_dev.py`, `settings_prod.py`).
+3. Single `settings.py` that reads from environment variables (`.env` in dev, real env in prod), with a committed `.env.example` as the shape contract.
+
+**Decision:** **(3)** — env-var-driven config, with `.env.example` committed and `.env` gitignored.
+
+**Why:**
+- **12-factor app, "Config" principle:** same code artifact, different environments. Promotes a build→ship→run flow.
+- Secrets never enter Git. `.gitignore` enforces it mechanically; `.env.example` documents what's needed without leaking values.
+- Zero branches for env differences — easier to reason about.
+
+**Trade-offs:**
+- Boot-time failures if an env var is missing. We'll mitigate with explicit `os.environ["X"]` reads (fail loud) rather than silent defaults for secrets.
+
+**Interview framing:** "I treated config as environment from day one, not just as a cleanup later. `.env.example` is the contract; `.env` is the instance. This is the 12-factor Config principle — and it's what lets the same Docker image run in dev, staging, and prod without rebuilding."
+
+---
+
+## LLD-6 · `python-decouple` for env parsing
+
+**Context:** Phase 1.4 wires LLD-5 into actual code. Three realistic options:
+
+| Option | Pros | Cons |
+|---|---|---|
+| `os.environ["X"]` | Zero deps | No casting (`"true"` ≠ `True`); boilerplate for lists; silent `KeyError` surprises |
+| `python-decouple` | Tiny; `cast=bool`, `cast=Csv()`; explicit defaults; reads `.env` or real env transparently | One extra dep |
+| `django-environ` | Richer (URL parsing for DB, cache, email) | Heavier; most features we don't use yet |
+
+**Decision:** `python-decouple`.
+
+**Why:**
+- Boolean/CSV casting matters now (`DEBUG`, `ALLOWED_HOSTS`). Hand-rolling that with `os.environ` is bug-prone.
+- No `.env` loader needed — `decouple` reads either source.
+- `django-environ`'s URL-parsing superpowers earn their weight only once we have a real Postgres `DATABASE_URL`; we can swap later with a one-line change.
+
+**Trade-offs:** One extra dependency. Minor.
+
+**Fail-loud choice:** `SECRET_KEY = config('DJANGO_SECRET_KEY')` passes **no default** — a missing env var raises at startup. For `DEBUG` and `ALLOWED_HOSTS` we give safe defaults (`False` and `""`), so a prod box missing those still boots securely.
+
+**Interview framing:** "I split secrets from code with `python-decouple`. Required values fail loud; convenience values have safe defaults. That means a misconfigured production container crashes immediately at boot — louder than silently running in debug mode."
+
+---
+
 ## Running decisions log (short form)
 
 | Date | ID | Decision |
@@ -188,6 +236,8 @@ Key LLD decisions here (we'll justify each when we build):
 | 2026-10-12 | HLD-3 | Single Postgres-compatible DB, no cache layer |
 | 2026-10-12 | LLD-1 | Feature-based Django apps; `ai/` is a non-app module |
 | 2026-10-12 | LLD-2 | Repository + Strategy + DTO patterns on the AI path |
+| 2026-10-12 | LLD-5 | Env-var config with `.env` + committed `.env.example` (12-factor) |
+| 2026-10-12 | LLD-6 | `python-decouple` for env parsing; `SECRET_KEY` fails loud if unset |
 
 ---
 

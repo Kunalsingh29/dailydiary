@@ -7,8 +7,10 @@ Live state of the project. Updated after every accepted step.
 **Framework:** Django 5.x (Python)
 **Started:** 2026-10-12
 **Current phase:** Phase 1 — Foundation
-**Next step:** 1.2 — Git init + `.gitignore` + first commit
+**Next step:** 1.5 — Base template + static files setup
 **Django version installed:** 5.2.18
+**Repo:** https://github.com/Kunalsingh29/dailydiary (public, `main` pushed)
+**Branching convention:** `feature/<step>-<slug>` → PR → merge → delete branch
 
 ---
 
@@ -30,10 +32,10 @@ flowchart LR
 
 ```mermaid
 flowchart TD
-    S11[1.1 Scaffold Django project + notes app]:::done --> S12[1.2 Git init + .gitignore]:::current
-    S12 --> S13[1.3 GitHub repo + push]
-    S13 --> S14[1.4 Settings split + .env]
-    S14 --> S15[1.5 Base template + static files]
+    S11[1.1 Scaffold Django project + notes app]:::done --> S12[1.2 Git init + .gitignore]:::done
+    S12 --> S13[1.3 GitHub repo + push]:::done
+    S13 --> S14[1.4 Settings split + .env]:::done
+    S14 --> S15[1.5 Base template + static files]:::current
     S15 --> DONE[→ Phase 2]
     classDef current fill:#ffd166,stroke:#333,stroke-width:2px,color:#000
     classDef done fill:#06d6a0,stroke:#333,color:#000
@@ -57,6 +59,9 @@ flowchart TD
 | 2026-10-12 | 0.1   | ✅     | Created `PROJECT_ROADMAP.md` and `PROGRESS_TRACKER.md` |
 | 2026-10-12 | 0.2   | ✅     | Named project `dailydiary` (product name DailyDiary); added `SYSTEM_DESIGN.md` for HLD/LLD; added flowcharts to tracker |
 | 2026-10-12 | 1.1   | ✅     | Scaffolded `dailydiary` project + `notes` app on Django 5.2.18; `manage.py check` clean |
+| 2026-10-12 | 1.2   | ✅     | Git init on `main`; `.gitignore` + `.env.example` + README seed; first commit `92b4c1a` (20 files, 706+) |
+| 2026-10-12 | 1.3   | ✅     | Installed `gh` 2.102.0, authed as Kunalsingh29, created public repo `dailydiary`, pushed `main` |
+| 2026-10-12 | 1.4   | ✅     | Branch `feature/1.4-settings-env`; `python-decouple` wired; `.env` created; `notes` added to INSTALLED_APPS; migrations applied; runserver returns HTTP 200 (LLD-6) |
 
 ---
 
