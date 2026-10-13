@@ -12,20 +12,18 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 
+from decouple import Csv, config
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-psijdg!(s0b24&8o6(fb3@0p17=ydisku7-43jqade)y%47@df'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+# All environment-driven settings live together, right at the top,
+# so a reader can see the config contract at a glance.
+# Values come from a local .env file (dev) or the real environment (prod).
+SECRET_KEY = config('DJANGO_SECRET_KEY')  # no default: fail loud if missing
+DEBUG = config('DJANGO_DEBUG', default=False, cast=bool)
+ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='', cast=Csv())
 
 
 # Application definition
@@ -37,6 +35,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Local apps
+    'notes',
 ]
 
 MIDDLEWARE = [
