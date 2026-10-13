@@ -228,6 +228,43 @@ Key LLD decisions here (we'll justify each when we build):
 
 ---
 
+## LLD-7 · Template inheritance as the Template Method pattern
+
+**Context:** We need a consistent chrome (header/nav/footer) across every page without copy-pasting HTML. Options:
+
+1. Include partials (`{% include "header.html" %}`) in every page.
+2. One `base.html` that defines empty `{% block %}` slots; pages `{% extends %}` it and fill the blocks.
+
+**Decision:** **(2)** — base template with named blocks.
+
+**Why:**
+- It's the **GoF Template Method pattern** applied to markup. The parent fixes the algorithm (header → main → footer); each child overrides specific steps (title, nav, content).
+- Changing the global nav or footer is a one-file edit forever.
+- Blocks default to empty, so a page can skip ones it doesn't need (e.g. no `nav` on the login page).
+
+**Trade-offs:** Forces every page to know the base template name; a rename cascades. Acceptable at this scale.
+
+**Interview framing:** "The templates demonstrate Template Method — `base.html` is the fixed algorithm, each page overrides the variable steps via `{% block %}`."
+
+---
+
+## LLD-8 · URL namespacing per app
+
+**Context:** Where do we declare URL routes — all in `dailydiary/urls.py`, or one `urls.py` per app with `include()`?
+
+**Decision:** Each app owns its `urls.py`. The project `urls.py` only `include()`s them. Each app also sets `app_name` for reverse-URL namespacing.
+
+**Why:**
+- **Encapsulation:** `notes` can later be lifted into its own package (or microservice) without rewriting routes in the project file.
+- **Namespacing:** `{% url 'notes:home' %}` scopes names to the app, so two apps can both have `home` without clashing.
+- Mirrors Django's own convention — recruiters/reviewers expect this layout.
+
+**Trade-offs:** One more file per app. Trivially worth it.
+
+**Interview framing:** "I organize URLs by feature, not by layer. Each app's `urls.py` is its own router with a namespace; the project `urls.py` is a top-level mux. That's what makes a Django 'app' feel like a reusable module."
+
+---
+
 ## Running decisions log (short form)
 
 | Date | ID | Decision |
@@ -238,6 +275,8 @@ Key LLD decisions here (we'll justify each when we build):
 | 2026-10-12 | LLD-2 | Repository + Strategy + DTO patterns on the AI path |
 | 2026-10-12 | LLD-5 | Env-var config with `.env` + committed `.env.example` (12-factor) |
 | 2026-10-12 | LLD-6 | `python-decouple` for env parsing; `SECRET_KEY` fails loud if unset |
+| 2026-10-12 | LLD-7 | `base.html` + `{% block %}` = Template Method pattern for pages |
+| 2026-10-12 | LLD-8 | Per-app `urls.py` with `app_name` namespace; project `urls.py` only `include`s |
 
 ---
 
