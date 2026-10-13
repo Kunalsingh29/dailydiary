@@ -126,8 +126,8 @@ Because your goal is AI engineering roles, we fold these in on purpose:
 - [ ] 6.2 Pytest + Django test settings + a handful of real tests per app
 - [ ] 6.3 GitHub Actions: lint + test on every PR
 - [ ] 6.4 README with setup, env vars, screenshots
-- [ ] 6.5 Dockerfile + `docker-compose.yml` (web + db)
-- [ ] 6.6 Deploy to a free host (stretch)
+- [ ] 6.5 Dockerfile + `docker-compose.yml` (web + Postgres)
+- [ ] 6.6 Deploy to **AWS** (chosen target): ECS Fargate + RDS Postgres + S3 + Secrets Manager + GitHub Actions → ECR → ECS pipeline. Terraform for infra-as-code (stretch).
 
 ### Phase 7 — Stretch / AI-engineer bonus
 - [ ] 7.1 Embeddings over notes + semantic search bar

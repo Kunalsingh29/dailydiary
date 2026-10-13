@@ -81,7 +81,7 @@ Why we chose things (so we don't re-litigate later).
 
 - [ ] Which Claude model id to default to (will decide at Phase 5 after reading current docs).
 - [ ] Do we use HTMX for the calendar interactions, or vanilla JS?
-- [ ] Hosting target for deploy phase (Fly.io vs Render vs Railway).
+- [x] ~~Hosting target for deploy phase~~ → **AWS** (ECS Fargate + RDS + S3). Decided 2026-10-12.
 - [ ] Timezone source: profile setting vs browser detection vs both.
 
 ---
