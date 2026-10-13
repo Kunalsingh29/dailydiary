@@ -9,6 +9,7 @@ A Django web app where a user logs in, writes dated notes in a notepad UI, sees 
 **Companion docs:**
 - `PROGRESS_TRACKER.md` — live state + "you are here" flowchart
 - `SYSTEM_DESIGN.md` — HLD / LLD decisions with interview framing
+- `API_GUIDE.md` — HTTP, REST, auth, idempotency, CORS, DRF, security, observability
 
 ---
 

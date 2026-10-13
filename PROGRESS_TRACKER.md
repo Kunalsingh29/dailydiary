@@ -7,7 +7,7 @@ Live state of the project. Updated after every accepted step.
 **Framework:** Django 5.x (Python)
 **Started:** 2026-10-12
 **Current phase:** Phase 1 — Foundation
-**Next step:** 1.5 — Base template + static files setup
+**Next step:** 2.1 — User registration view + form (Phase 2 begins)
 **Django version installed:** 5.2.18
 **Repo:** https://github.com/Kunalsingh29/dailydiary (public, `main` pushed)
 **Branching convention:** `feature/<step>-<slug>` → PR → merge → delete branch
@@ -18,7 +18,7 @@ Live state of the project. Updated after every accepted step.
 
 ```mermaid
 flowchart LR
-    P1[Phase 1<br/>Foundation]:::current --> P2[Phase 2<br/>Auth & Profile]
+    P1[Phase 1<br/>Foundation]:::done --> P2[Phase 2<br/>Auth & Profile]:::current
     P2 --> P3[Phase 3<br/>Notes CRUD]
     P3 --> P4[Phase 4<br/>Calendar views]
     P4 --> P5[Phase 5<br/>AI Summarizer]
@@ -35,7 +35,7 @@ flowchart TD
     S11[1.1 Scaffold Django project + notes app]:::done --> S12[1.2 Git init + .gitignore]:::done
     S12 --> S13[1.3 GitHub repo + push]:::done
     S13 --> S14[1.4 Settings split + .env]:::done
-    S14 --> S15[1.5 Base template + static files]:::current
+    S14 --> S15[1.5 Base template + static files]:::done
     S15 --> DONE[→ Phase 2]
     classDef current fill:#ffd166,stroke:#333,stroke-width:2px,color:#000
     classDef done fill:#06d6a0,stroke:#333,color:#000
@@ -62,6 +62,8 @@ flowchart TD
 | 2026-10-12 | 1.2   | ✅     | Git init on `main`; `.gitignore` + `.env.example` + README seed; first commit `92b4c1a` (20 files, 706+) |
 | 2026-10-12 | 1.3   | ✅     | Installed `gh` 2.102.0, authed as Kunalsingh29, created public repo `dailydiary`, pushed `main` |
 | 2026-10-12 | 1.4   | ✅     | Branch `feature/1.4-settings-env`; `python-decouple` wired; `.env` created; `notes` added to INSTALLED_APPS; migrations applied; runserver returns HTTP 200 (LLD-6) |
+| 2026-10-12 | 1.5   | ✅     | Branch `feature/1.5-base-template`; `base.html` + `home.html` + `styles.css`; `notes/urls.py` with `app_name`; project `urls.py` includes it; smoke tests pass (`/`→200, `/static/css/styles.css`→200, 404 route works) (LLD-7, LLD-8) |
+| 2026-10-12 | API   | ✅     | Added `API_GUIDE.md` — HTTP, REST, auth, idempotency, pagination, CORS, DRF, security, observability, with flowcharts and real examples |
 
 ---
 
